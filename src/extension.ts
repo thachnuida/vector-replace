@@ -18,11 +18,11 @@ const showViewCommand = (context: vscode.ExtensionContext) => () => {
     const editor = vscode.window.activeTextEditor
     const panel  = createPanel(context)
     const st     = state.create(panel.webview, editor)
-    listenEvents(panel, st)
+    listenEvents(context, panel, st)
 }
 
 const createPanel = (context: vscode.ExtensionContext) => {
-    const panel = vscode.window.createWebviewPanel('vectorreplace', 'Vector Replace', vscode.ViewColumn.Beside, { enableScripts: true })
+    const panel = vscode.window.createWebviewPanel('vectorreplace', 'Vector Replace MRH', vscode.ViewColumn.Beside, { enableScripts: true })
     
     const htmlPath = path.join(context.extensionPath, 'media', 'views', 'vector-replace.html')
     readAndSetHtmlToWebview(panel.webview, htmlPath)
@@ -37,9 +37,9 @@ const readAndSetHtmlToWebview = (webview: vscode.Webview, htmlPath: string) => {
     })
 }
 
-const listenEvents = (panel: vscode.WebviewPanel, st: state.State) => {
+const listenEvents = (context: vscode.ExtensionContext, panel: vscode.WebviewPanel, st: state.State) => {
     const events = [
-        panel.webview.onDidReceiveMessage(async mes => await behaviour.execute(mes, st)),
+        panel.webview.onDidReceiveMessage(async mes => await behaviour.execute(context, mes, st)),
         vscode.window.onDidChangeActiveTextEditor(editor => state.setEditor(st, editor)),
         vscode.workspace.onDidChangeTextDocument    (() => registerRefresh(st)),
         vscode.window.onDidChangeTextEditorSelection(() => registerRefresh(st))

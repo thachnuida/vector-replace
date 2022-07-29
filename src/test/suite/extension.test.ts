@@ -7,6 +7,7 @@ let st         : state.State         | undefined
 let document   : vscode.TextDocument | undefined
 let editor     : vscode.TextEditor   | undefined
 let disposables: vscode.Disposable[] | undefined
+let context	   : vscode.ExtensionContext
 
 const init = async () => {
 	document = await vscode.workspace.openTextDocument()
@@ -33,7 +34,7 @@ suite('extension', () => {
 
 	test('replace text in editor', async () => {
 		await editor!.edit(edit => edit.insert(new vscode.Position(0, 0), '-abc-defgh-ijk-'))
-		await behaviour.execute({ command: 'runReplace', searchStr: 'abc\ndefgh\nijk', replaceStr: '12\n3\n456' }, st!)
+		await behaviour.execute(context, { command: 'runReplace', searchStr: 'abc\ndefgh\nijk', replaceStr: '12\n3\n456' }, st!)
 		
 		const text = document?.getText()
 

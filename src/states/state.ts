@@ -49,6 +49,12 @@ export const clearProcessObject = (st: State, po: ProcessObject) => {
     }
 }
 
+export const initWebViewData = (context: vscode.ExtensionContext, st: State) => {
+    const searchStr = context.globalState.get('searchStr');
+    const replaceStr = context.globalState.get('replaceStr');
+    st.webview?.postMessage({ type: 'initData', value: {searchStr, replaceStr} })
+}
+
 export const reportProgress = (st: State, po: ProcessObject, method: string, progress: number) => {
     if (st.processObject === po) st.webview?.postMessage({ type: 'progress', method, value: progress })
 }

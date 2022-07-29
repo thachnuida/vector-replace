@@ -5,7 +5,7 @@ import * as messageTypes from './types'
 import * as state        from '../states/state'
 import * as rangeUtil    from '../util/range'
 
-export const execute = async (message: messageTypes.MessageTypes, st: state.State) => {
+export const execute = async (context: vscode.ExtensionContext, message: messageTypes.MessageTypes, st: state.State) => {
     switch (message.command) {
         case 'refresh':
             await refresh(st)
@@ -14,6 +14,10 @@ export const execute = async (message: messageTypes.MessageTypes, st: state.Stat
             await runSearch(message, st)
             return
         case 'runReplace':
+            if (context) {
+                context.globalState.update('searchStr', message.searchStr);
+                context.globalState.update('replaceStr', message.replaceStr);
+            }
             await runReplace(message, st)
             return
         case 'setSelectionSearch':
@@ -49,6 +53,9 @@ export const execute = async (message: messageTypes.MessageTypes, st: state.Stat
         case 'setMatrixSearch':
             await setMatrixSearch(message, st)
             return
+        case 'requireInitData':
+            state.initWebViewData(context, st);
+            return;
     }
 }
 

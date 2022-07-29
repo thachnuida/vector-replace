@@ -107,11 +107,11 @@
                 <label for="selectionSearch">Selection search</label>
             </span>
             <span class="setting">
-                <input type="checkbox" id="useRegExp" class="checkbox">
+                <input type="checkbox" id="useRegExp" class="checkbox" checked>
                 <label for="useRegExp">Use regular expression</label>
             </span>
             <span class="setting">
-                <input type="checkbox" id="captureWhole" class="checkbox" disabled>
+                <input type="checkbox" id="captureWhole" class="checkbox">
                 <label for="captureWhole">Capture whole</label>
             </span>
             <span class="setting">
@@ -147,7 +147,7 @@
                 <label for="justSearch">Just search</label>
             </span>
             <span class="setting">
-                <input type="checkbox" id="matrixSearch" class="checkbox">
+                <input type="checkbox" id="matrixSearch" class="checkbox" checked>
                 <label for="matrixSearch">Matrix search</label>
             </span>
         </div>
@@ -197,7 +197,15 @@
                     progress     .textContent = `${message.method} ${Math.floor(message.value * 100)}%`
                     progressLabel.textContent = `${message.method} ${Math.floor(message.value * 100)}%`
                     return
+                case 'initData':
+                    searchTextArea.innerHTML = message.value.searchStr
+                    replaceTextArea.innerHTML = message.value.replaceStr
+                    return;
             }
+        })
+
+        vscode.postMessage({
+            command   : 'requireInitData'
         })
 
         const runReplace = () =>
